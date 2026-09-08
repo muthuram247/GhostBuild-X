@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GhostBuild-X</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: #d1d5db;
+        }
+
+        main {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .hero h2 {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            max-width: 750px;
+            margin: auto;
+            color: #6b7280;
+        }
+
+        .input-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .input-box label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 180px;
+            padding: 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            resize: vertical;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #111827;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #374151;
+        }
+
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        #status {
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        #results {
+            margin-top: 35px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            margin-bottom: 18px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .card h3 {
+            margin-bottom: 12px;
+        }
+
+        .card ul,
+        .card ol {
+            padding-left: 25px;
+        }
+
+        .card li {
+            margin-bottom: 7px;
+        }
+
+        .technology-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .technology {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .technology strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #6b7280;
+        }
+
+        @media (max-width: 700px) {
+            .hero h2 {
+                font-size: 28px;
+            }
+
+            .technology-grid {
+                grid-template-columns: 1fr;
+            }
+
+            main {
+                width: 94%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>GhostBuild-X</h1>
+        <p>Intent-to-Execution Project Builder</p>
+    </header>
+
+    <main>
+
+        <section class="hero">
+            <h2>Turn Your Idea Into a Build Plan</h2>
+
+            <p>
+                Describe your software idea and GhostBuild-X will analyze
+                your requirements, identify features, recommend technologies,
+                create modules and generate development tasks.
+            </p>
+        </section>
+
+
+        <section class="input-box">
+
+            <label for="projectIdea">
+                Describe Your Project
+            </label>
+
+            <textarea
+                id="projectIdea"
+                placeholder="Example: I want to build an AI-powered college attendance website with student login, database, notifications and analytics."
+            ></textarea>
+
+            <button
+                id="analyzeButton"
+                onclick="analyzeProject()">
+                Analyze Project
+            </button>
+
+            <p id="status"></p>
+
+        </section>
+
+
+        <section id="results" class="hidden">
+
+            <h2>Project Analysis</h2>
+
+
+            <div class="card">
+
+                <h3>Project Type</h3>
+
+                <p id="projectType"></p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Detected Features</h3>
+
+                <ul id="features"></ul>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Recommended Technologies</h3>
+
+                <div class="technology-grid">
+
+                    <div class="technology">
+                        <strong>Frontend</strong>
+                        <span id="frontendTechnology"></span>
+                    </div>
+
+                    <div class="technology">
+                        <strong>Backend</strong>
+                        <span id="backendTechnology"></span>
+                    </div>
+
+                    <div class="technology">
+                        <strong>Database</strong>
+                        <span id="databaseTechnology"></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Project Modules</h3>
+
+                <ul id="modules"></ul>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Development Tasks</h3>
+
+                <ol id="tasks"></ol>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>GhostBuild-X</p>
+    </footer>
+
+
+    <script>
+
+        const API_URL = "http://localhost:5000";
+
+
+        async function analyzeProject() {
+
+            const idea =
+                document.getElementById("projectIdea").value.trim();
+
+            const button =
+                document.getElementById("analyzeButton");
+
+            const status =
+                document.getElementById("status");
+
+            const results =
+                document.getElementById("results");
+
+
+            if (!idea) {
+
+                status.textContent =
+                    "Please describe your project idea.";
+
+                return;
+            }
+
+
+            button.disabled = true;
+
+            button.textContent = "Analyzing...";
+
+            status.textContent =
+                "GhostBuild-X is analyzing your idea...";
+
+
+            try {
+
+                const response = await fetch(
+                    `${API_URL}/api/analyze`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            idea: idea
+                        })
+                    }
+                );
+
+
+                const data = await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error || "Request failed"
+                    );
+                }
+
+
+                displayResults(data.project);
+
+
+                results.classList.remove("hidden");
+
+                status.textContent =
+                    "Project analysis completed.";
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                status.textContent =
+                    "Unable to connect to GhostBuild-X backend. Make sure the backend is running.";
+
+            }
+
+            finally {
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Analyze Project";
+            }
+        }
+
+
+        function displayResults(project) {
+
+            document.getElementById("projectType")
+                .textContent = project.project_type;
+
+
+            const features =
+                document.getElementById("features");
+
+            features.innerHTML = "";
+
+
+            if (project.detected_features.length === 0) {
+
+                const item =
+                    document.createElement("li");
+
+                item.textContent =
+                    "No specific features detected.";
+
+                features.appendChild(item);
+
+            }
+
+            else {
+
+                project.detected_features.forEach(
+                    function(feature) {
+
+                        const item =
+                            document.createElement("li");
+
+                        item.textContent =
+                            feature;
+
+                        features.appendChild(item);
+                    }
+                );
+            }
+
+
+            document.getElementById(
+                "frontendTechnology"
+            ).textContent =
+                project.recommended_technologies.frontend;
+
+
+            document.getElementById(
+                "backendTechnology"
+            ).textContent =
+                project.recommended_technologies.backend;
+
+
+            document.getElementById(
+                "databaseTechnology"
+            ).textContent =
+                project.recommended_technologies.database;
+
+
+            const modules =
+                document.getElementById("modules");
+
+            modules.innerHTML = "";
+
+
+            project.modules.forEach(
+                function(module) {
+
+                    const item =
+                        document.createElement("li");
+
+                    item.textContent =
+                        module;
+
+                    modules.appendChild(item);
+                }
+            );
+
+
+            const tasks =
+                document.getElementById("tasks");
+
+            tasks.innerHTML = "";
+
+
+            project.development_tasks.forEach(
+                function(task) {
+
+                    const item =
+                        document.createElement("li");
+
+                    item.textContent =
+                        task;
+
+                    tasks.appendChild(item);
+                }
+            );
+        }
+
+    </script>
+
+</body>
+</html>
