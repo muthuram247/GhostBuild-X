@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GhostBuild X</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #111827;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        header p {
+            margin: 6px 0 0;
+            color: #cbd5e1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 35px auto;
+            padding: 0 18px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .intro h2 {
+            margin-bottom: 8px;
+        }
+
+        .intro p {
+            color: #64748b;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #2563eb;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 14px;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        #status {
+            text-align: center;
+            margin: 20px 0;
+            color: #64748b;
+        }
+
+        .results {
+            display: none;
+            margin-top: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #111827;
+        }
+
+        ul {
+            padding-left: 22px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 7px 10px;
+            margin: 4px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 14px;
+            border-radius: 8px;
+            display: none;
+            margin-top: 15px;
+        }
+
+        .flow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .flow span {
+            background: #f1f5f9;
+            padding: 9px 12px;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>GhostBuild X</h1>
+    <p>From Intent to Execution</p>
+</header>
+
+<div class="container">
+
+    <div class="intro">
+        <h2>Turn Your Idea Into an Engineering Plan</h2>
+        <p>
+            Describe your software idea and GhostBuild X will structure it
+            before coding begins.
+        </p>
+    </div>
+
+    <textarea id="idea"
+        placeholder="Example: I want to build an AI-powered college attendance platform with student login, database, notifications and analytics."></textarea>
+
+    <button id="analyzeBtn" onclick="analyzeIdea()">
+        Analyze My Idea
+    </button>
+
+    <div id="status"></div>
+
+    <div id="error" class="error"></div>
+
+    <div id="results" class="results">
+
+        <div class="card">
+            <h3>Project Type</h3>
+            <p id="projectType"></p>
+        </div>
+
+        <div class="card">
+            <h3>Requirements</h3>
+            <div id="requirements"></div>
+        </div>
+
+        <div class="card">
+            <h3>Constraints</h3>
+            <ul id="constraints"></ul>
+        </div>
+
+        <div class="card">
+            <h3>Recommended Technologies</h3>
+            <ul id="technologies"></ul>
+        </div>
+
+        <div class="card">
+            <h3>Architecture</h3>
+            <div class="flow" id="architecture"></div>
+        </div>
+
+        <div class="card">
+            <h3>Development Plan</h3>
+            <ol id="tasks"></ol>
+        </div>
+
+        <div class="card">
+            <h3>Agent Context</h3>
+            <p>
+                GhostBuild X prepares structured engineering context
+                before handing the project to an AI coding agent.
+            </p>
+            <div class="flow">
+                <span>Intent</span>
+                <span>Requirements</span>
+                <span>Constraints</span>
+                <span>Architecture</span>
+                <span>Tasks</span>
+                <span>Execution</span>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    GhostBuild X — From Intent to Execution
+</footer>
+
+<script>
+async function analyzeIdea() {
+
+    const idea = document.getElementById("idea").value.trim();
+    const button = document.getElementById("analyzeBtn");
+    const status = document.getElementById("status");
+    const results = document.getElementById("results");
+    const error = document.getElementById("error");
+
+    error.style.display = "none";
+    results.style.display = "none";
+
+    if (!idea) {
+        error.textContent = "Please enter your software idea.";
+        error.style.display = "block";
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Analyzing...";
+    status.textContent = "GhostBuild X is analyzing your idea...";
+
+    try {
+
+        const response = await fetch("/api/analyze", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idea: idea
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Something went wrong.");
+        }
+
+        document.getElementById("projectType").textContent =
+            data.project_type;
+
+        const requirements =
+            document.getElementById("requirements");
+
+        requirements.innerHTML = "";
+
+        data.requirements.forEach(item => {
+            const tag = document.createElement("span");
+            tag.className = "tag";
+            tag.textContent = item;
+            requirements.appendChild(tag);
+        });
+
+        const constraints =
+            document.getElementById("constraints");
+
+        constraints.innerHTML = "";
+
+        data.constraints.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = item;
+            constraints.appendChild(li);
+        });
+
+        const technologies =
+            document.getElementById("technologies");
+
+        technologies.innerHTML = "";
+
+        Object.entries(data.technologies).forEach(([key, value]) => {
+            const li = document.createElement("li");
+            li.textContent = key + ": " + value;
+            technologies.appendChild(li);
+        });
+
+        const architecture =
+            document.getElementById("architecture");
+
+        architecture.innerHTML = "";
+
+        data.architecture.forEach((item, index) => {
+
+            const box = document.createElement("span");
+            box.textContent = item;
+
+            architecture.appendChild(box);
+
+            if (index < data.architecture.length - 1) {
+                const arrow = document.createElement("strong");
+                arrow.textContent = " → ";
+                architecture.appendChild(arrow);
+            }
+        });
+
+        const tasks =
+            document.getElementById("tasks");
+
+        tasks.innerHTML = "";
+
+        data.development_tasks.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = item;
+            tasks.appendChild(li);
+        });
+
+        results.style.display = "block";
+        status.textContent = "Analysis completed.";
+
+    } catch (err) {
+
+        error.textContent = err.message;
+        error.style.display = "block";
+        status.textContent = "";
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "Analyze My Idea";
+    }
+}
+</script>
+
+</body>
+</html>
